@@ -4,8 +4,16 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.res.AssetManager;
 import android.graphics.Bitmap;
+import android.graphics.Color;
+import android.graphics.Matrix;
+import android.graphics.Rect;
+import android.graphics.pdf.PdfRenderer;
+import android.os.Build;
 import android.os.Bundle;
 import android.os.ParcelFileDescriptor;
+import android.util.Log;
+import android.view.View;
+import android.widget.ImageView;
 import android.widget.TextView;
 
 import java.io.File;
@@ -25,6 +33,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private File target;
+    private ImageView imageView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,11 +50,63 @@ public class MainActivity extends AppCompatActivity {
         TextView tv = findViewById(R.id.sample_text);
         tv.setText(stringFromJNI());
 
+        imageView = findViewById(R.id.image);
 
+        findViewById(R.id.btn_native).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView.setImageBitmap(null);
+                renderWithAndroid();
+            }
+        });
 
+        findViewById(R.id.btn_opdf).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                imageView.setImageBitmap(null);
+                renderWithOPdf();
+            }
+        });
+
+    }
+
+    private void renderWithAndroid() {
         ParcelFileDescriptor file;
         try {
-             file = ParcelFileDescriptor.open(target,
+            file = ParcelFileDescriptor.open(target,
+                    ParcelFileDescriptor.MODE_READ_ONLY);
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+
+        Bitmap bmp = Bitmap.createBitmap(2048, 2048, Bitmap.Config.ARGB_8888);
+
+        if(Build.VERSION.SDK_INT>21) {
+            try {
+                bmp.eraseColor(Color.TRANSPARENT);
+                PdfRenderer pdfRenderer = new PdfRenderer(file);
+                PdfRenderer.Page page = pdfRenderer.openPage(0);
+                Rect rect = new Rect();
+                rect.set(0, 0, 2048, 2048);
+                Matrix matrix = new Matrix();
+                matrix.postScale(2.0f, 2.0f);
+                Log.i("PdfRenderer", "page opened");
+                page.render(bmp, rect, matrix, PdfRenderer.Page.RENDER_MODE_FOR_DISPLAY);
+                Log.i("PdfRenderer", "page rendered");
+                page.close();
+                pdfRenderer.close();
+                file.close();
+                imageView.setImageBitmap(bmp);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    private void renderWithOPdf() {
+        ParcelFileDescriptor file;
+        try {
+            file = ParcelFileDescriptor.open(target,
                     ParcelFileDescriptor.MODE_READ_ONLY);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -55,7 +116,13 @@ public class MainActivity extends AppCompatActivity {
         Bitmap bmp = Bitmap.createBitmap(2048, 2048, Bitmap.Config.ARGB_8888);
         PdfTest.decodePdf(fd, bmp);
 
+        try {
+            file.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
+        imageView.setImageBitmap(bmp);
     }
 
 
