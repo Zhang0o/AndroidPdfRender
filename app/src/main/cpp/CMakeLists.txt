@@ -21,7 +21,22 @@ add_library( # Sets the name of the library.
              SHARED
 
              # Provides a relative path to your source file(s).
-             native-lib.cpp )
+             native-lib.cpp
+
+        #        src/main/jni/mali/EGLRuntime.cpp
+        mali/AndroidPlatform.cpp
+        mali/ETCHeader.cpp
+        #        src/main/jni/mali/HDRImage.cpp
+        mali/JavaClass.cpp
+        mali/Matrix.cpp
+        #        src/main/jni/mali/Platform.cpp
+        mali/Shader.cpp
+        mali/Text.cpp
+        mali/Texture.cpp
+        mali/Timer.cpp
+
+
+        )
 
 
 # Searches for a specified prebuilt library and stores the path as a
@@ -49,10 +64,14 @@ target_link_libraries( # Specifies the target library.
                        ${log-lib}
                         jnigraphics
                         android
+                        GLESv2
+                        EGL
         c++_chrome.cr
         chrome_zlib.cr
         icui18n.cr
         icui18n_hidden_visibility.cr
         icuuc.cr
         pdfium.cr
-        icuuc_hidden_visibility.cr)
+        icuuc_hidden_visibility.cr
+
+        )
