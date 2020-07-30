@@ -3,6 +3,7 @@
 #include <sys/stat.h>
 #include <unistd.h>
 #include <android/bitmap.h>
+#include <error.h>
 
 #include "logger.h"
 
@@ -32,7 +33,13 @@ static int getBlock(void* params, unsigned long position,
     const int fd = (intptr_t) params;
     const int readCount = pread(fd, outBuffer, size, position);
     if(readCount < 0) {
-        LOGE("Cannot read from file descriptor, Error:%d", errno);
+        int code;
+#ifdef errno
+        code = errno;
+#else
+        code = -1;
+#endif
+        LOGE("Cannot read from file descriptor, Error:%d", code);
         return 0;
     }
     return 1;
