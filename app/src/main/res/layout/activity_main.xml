@@ -6,42 +6,13 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
-    <TextView
+    <Button
         android:id="@+id/sample_text"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="Hello World!"
+        android:text="Demo"
         android:layout_gravity="center_horizontal"
         android:layout_marginTop="30dp"/>
-
-    <ImageView
-        android:id="@+id/image"
-        android:background="#eeeeee"
-        android:layout_marginTop="100dp"
-        android:layout_gravity="center_horizontal"
-        android:layout_width="200dp"
-        android:layout_height="200dp" />
-
-    <LinearLayout
-        android:layout_marginTop="350dp"
-        android:gravity="center_horizontal"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" >
-
-        <Button
-            android:id="@+id/btn_native"
-            android:text="native"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-        <Button
-            android:id="@+id/btn_opdf"
-            android:text="opdf"
-            android:layout_marginStart="30dp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
-
-    </LinearLayout>
 
 
 </FrameLayout>

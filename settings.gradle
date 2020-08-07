@@ -1,2 +1,4 @@
+//include ':lib_pdf_gl'
+include ':lib_pdf_surface'
 include ':app'
 rootProject.name = "PDFt"
