@@ -1,6 +1,19 @@
-# OPdf
-Android PDF 查看器实现.
+# OPdf surface-renderer
 
+## Android PDF 查看器实现
+
+### 工程目录说明:
+
+         /app 是surface-renderer演示Demo(依赖lib_pdf_surface)
+         /lib_pdf_surface 是"surface-renderer"的实现
+### include to project
+
+"surface-renderer" 0.0.2 已经发布到jcenter 
+
+        //use in gradle:
+        implementation 'com.ober.opdf:lib_pdf_surface:0.0.2'
+
+### 使用简介
 
 基于SurfaceView的单页PDF查看，可自由缩放和平移。
 使用方便，尤其适合展示复杂的PDF页面。
@@ -25,6 +38,18 @@ It is an single PDF page viewer implementation base on SurfaceView.
 Free scale and translate is supported.
 Easy to use and show complicated PDF very well.
 
-*API level lower than 21 is not support now because of SDK-built-in class PdfRenderer.
 
-*The GLSurfaceView implementation will coming later and API level limitation will be resolved.
+ChangeLog
+-----------
+### v0.0.1
+* Initialize surface-renderer and build a simple demo
+
+### v0.0.2
+* Write some java document
+* Reformat code and add upload gradle plugin
+
+Todo
+-----
+* API level lower than 21 is not support now because of SDK-built-in class PdfRenderer.
+
+* The GLSurfaceView implementation will coming later and API level limitation will be resolved.
