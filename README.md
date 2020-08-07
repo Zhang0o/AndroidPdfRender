@@ -22,3 +22,7 @@
 It is an single PDF page viewer implementation base on SurfaceView.
 Free scale and translate is supported.
 Easy to use and show complicated PDF very well.
+
+API level lower than 21 is not support now because of SDK-built-in class PdfRenderer.
+
+The GLSurfaceView implementation will coming later and API level limitation will be resolved.
