@@ -8,16 +8,27 @@ import com.ober.opdf.surface.render.FullTextureBmpGenerator;
 
 
 /**
+ * Global PDF Render Configuration Entry
+ *
  * Created by ober on 2020/8/2.
  */
 public class OPdfRenderConfig {
 
     private static FullTextureBmpGenerator fullTextureBmpGenerator;
 
+    private static int canvasBackgroundColor = Color.WHITE;
+
+    /**
+     * Set custom Preview FullTextureBitmapGenerator, if not set, default{@link DefFullTextureBmpGenerator} will be supplied
+     * @param fullTextureBmpGenerator custom fullTextureBmpGenerator to be set, null is ok
+     */
     public static void setFullTextureBmpGenerator(FullTextureBmpGenerator fullTextureBmpGenerator) {
         OPdfRenderConfig.fullTextureBmpGenerator = fullTextureBmpGenerator;
     }
 
+    /**
+     * Get custom FullTextureBmpGenerator or default one , always none null.
+     */
     public static FullTextureBmpGenerator getFullTextureBmpGenerator() {
         if(fullTextureBmpGenerator == null) {
             fullTextureBmpGenerator = new DefFullTextureBmpGenerator();
@@ -25,8 +36,20 @@ public class OPdfRenderConfig {
         return fullTextureBmpGenerator;
     }
 
+    /**
+     * Set canvas background color that will be drawn under pdf page
+     * @param canvasBackgroundColor ARGB int color
+     */
+    public static void setCanvasBackgroundColor(int canvasBackgroundColor) {
+        OPdfRenderConfig.canvasBackgroundColor = canvasBackgroundColor;
+    }
+
+    /**
+     * Get canvas background color
+     * @return ARGB int color
+     */
     public static int getCanvasBackgroundColor() {
-        return Color.WHITE;
+        return canvasBackgroundColor;
     }
 
     private static class DefFullTextureBmpGenerator implements FullTextureBmpGenerator {
