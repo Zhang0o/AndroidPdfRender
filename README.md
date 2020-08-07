@@ -1,6 +1,14 @@
-# OPdf
+# OPdf surface-renderer
+
 Android PDF 查看器实现.
 
+目录说明:
+/app 是surface-renderer 演示 Demo, 依赖lib_pdf_surface
+/lib_pdf_surface 模块下是"surface-renderer"的实现
+
+"surface-renderer" 已经发布到jcenter 
+最新版本
+implementation 'com.ober.opdf:lib_pdf_surface:0.0.2'
 
 基于SurfaceView的单页PDF查看，可自由缩放和平移。
 使用方便，尤其适合展示复杂的PDF页面。
