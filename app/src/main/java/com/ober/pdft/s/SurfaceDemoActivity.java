@@ -1,9 +1,12 @@
 package com.ober.pdft.s;
 
+import android.graphics.PixelFormat;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.ScaleGestureDetector;
 import android.view.SurfaceView;
+import android.view.View;
+import android.widget.ProgressBar;
 import android.widget.Toast;
 
 import androidx.annotation.Nullable;
@@ -24,6 +27,7 @@ public class SurfaceDemoActivity extends AppCompatActivity {
     private static final String TAG = "OPdf";
 
     SurfaceView surfaceView;
+    ProgressBar progressBar;
 
     OPdfSurfaceRenderer mRenderer;
 
@@ -31,7 +35,12 @@ public class SurfaceDemoActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_surface_demo);
+
         surfaceView = findViewById(R.id.surfaceView);
+        surfaceView.setZOrderOnTop(true);
+        surfaceView.getHolder().setFormat(PixelFormat.TRANSLUCENT);
+
+        progressBar = findViewById(R.id.progressBar);
         File pdfFile = new File(getCacheDir(), "test.pdf");
 
         mRenderer = new OPdfSurfaceRenderer(surfaceView, pdfFile, 0);
@@ -57,6 +66,7 @@ public class SurfaceDemoActivity extends AppCompatActivity {
         @Override
         public void onPdfPreviewReady() {
             Log.i(TAG, "onPdfPreviewReady");
+            progressBar.setVisibility(View.GONE);
         }
 
         @Override
@@ -81,6 +91,7 @@ public class SurfaceDemoActivity extends AppCompatActivity {
         @Override
         public void onSurfaceCreated() {
             Log.i(TAG, "onSurfaceCreated");
+            progressBar.setVisibility(View.VISIBLE);
         }
 
         @Override
