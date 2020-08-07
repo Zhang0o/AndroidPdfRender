@@ -1,4 +1,6 @@
 # OPdf
+Android PDF 查看器实现.
+
 
 基于SurfaceView的单页PDF查看，可自由缩放和平移。
 使用方便，尤其适合展示复杂的PDF页面。
@@ -23,6 +25,6 @@ It is an single PDF page viewer implementation base on SurfaceView.
 Free scale and translate is supported.
 Easy to use and show complicated PDF very well.
 
-API level lower than 21 is not support now because of SDK-built-in class PdfRenderer.
+*API level lower than 21 is not support now because of SDK-built-in class PdfRenderer.
 
-The GLSurfaceView implementation will coming later and API level limitation will be resolved.
+*The GLSurfaceView implementation will coming later and API level limitation will be resolved.
