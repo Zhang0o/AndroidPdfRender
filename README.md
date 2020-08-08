@@ -8,10 +8,10 @@
          /lib_pdf_surface 是"surface-renderer"的实现
 ### include to project
 
-"surface-renderer" 0.0.3 已经发布到jcenter 
+"surface-renderer" 0.0.4 已经发布到jcenter 
 
         //use in gradle:
-        implementation 'com.ober.opdf:lib_pdf_surface:0.0.3'
+        implementation 'com.ober.opdf:lib_pdf_surface:0.0.4'
 
 ### 使用简介
 
@@ -52,6 +52,9 @@ ChangeLog
 * Initialize pdf center inside view
 * Add some document
 * Remove androidx.appcompat dependency 
+
+### v0.0.4
+* bug fix
 
 Todo
 -----
