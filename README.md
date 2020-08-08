@@ -1,8 +1,10 @@
 # Android Pdf surface-renderer
+高效，稳定的渲染单页PDF
 
 ## Android PDF 查看器实现
 
 <img src="https://github.com/Zhang0o/AndroidPdfRender/blob/master/demo-min.gif" width="221" height="480"/>
+
 
 ### 工程目录说明:
 
