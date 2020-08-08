@@ -2,6 +2,8 @@
 
 ## Android PDF 查看器实现
 
+![image](https://github.com/Zhang0o/AndroidPdfRender/blob/master/demo-min.gif)
+
 ### 工程目录说明:
 
          /app 是surface-renderer演示Demo(依赖lib_pdf_surface)
