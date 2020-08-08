@@ -28,6 +28,8 @@ import com.ober.opdf.surface.render.events.SPdfPageOpenEv;
 import java.io.File;
 
 /**
+ * Core Renderer Logic
+ *
  * Created by ober on 2020/7/31.
  */
 public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
@@ -40,7 +42,7 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
 
     private final Handler mHandler;
 
-    private boolean optimizeScaleMode;
+    private boolean optimizeTransformMode;
 
     private int pdfWidth;
     private int pdfHeight;
@@ -69,6 +71,8 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         this.sDecoder = new SDecoder(mHandler);
         this.isDestroyed = false;
         this.mBmpPaint = new Paint();
+        this.mBmpPaint.setAntiAlias(true);
+        this.mBmpPaint.setDither(true);
         this.transform = new Matrix();
         innerSurfaceCallback = new SurfaceHolder.Callback2() {
             @Override
@@ -105,30 +109,62 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         surfaceView.getHolder().addCallback(innerSurfaceCallback);
     }
 
-    public void setOPdfCallback(OPdfCallback l) {
-        outerListener = l;
+    /**
+     * Set a callback to handle some events
+     *
+     * @param cb callback nullable
+     */
+    public void setOPdfCallback(OPdfCallback cb) {
+        outerListener = cb;
     }
 
-    public void setOptimizeTransformDrawing(boolean optimizeScaleMode) {
-        this.optimizeScaleMode = optimizeScaleMode;
+    /**
+     * Set true to optimize drawing result when transforming.
+     *
+     * Effect function {@link #onDrawTransforming(Canvas)}.
+     * If true is set, last frame-texture will be drawn on top of preview-texture,
+     * so that view will be higher resolution in the last rendered rect.
+     * It may lose some performance because one more bitmap may be drawn when transforming
+     *
+     * @param optimizeTransformMode whether optimize drawing when transforming
+     */
+    public void setOptimizeTransformDrawing(boolean optimizeTransformMode) {
+        this.optimizeTransformMode = optimizeTransformMode;
     }
 
+    /**
+     * Can be invoke in main thread only
+     * @return if it is destroyed
+     */
+    public final boolean isDestroyed() {
+        return isDestroyed;
+    }
+
+    /**
+     * Called when initialize decoding
+     *
+     * Allocate resources and start worker thread
+     *
+     * @param pdfFile target pdf file
+     * @param page target pdf page
+     */
     protected void initialize(File pdfFile, int page) {
         isDestroyed = false;
         sDecoder.init(pdfFile, page, this);
-        mBmpPaint.setAntiAlias(true);
-        mBmpPaint.setDither(true);
     }
 
+    /**
+     * Called when surface destroyed
+     */
     protected void destroy() {
         isDestroyed = true;
         sDecoder.destroy();
     }
 
-    public final boolean isDestroyed() {
-        return isDestroyed;
-    }
-
+    /**
+     * Draw after transform end
+     * @param canvas surface holder locked canvas
+     */
     protected void onDrawTransformEnd(Canvas canvas) {
         Bitmap bmp = frameTextureHolder.bitmap;
         if(bmp == null) {
@@ -140,6 +176,10 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         canvas.drawBitmap(bmp, 0, 0, mBmpPaint);
     }
 
+    /**
+     * Draw while transforming
+     * @param canvas surface holder locked canvas
+     */
     protected void onDrawTransforming(Canvas canvas) {
         Bitmap bmp = previewTextureHolder.bitmap;
         if(bmp == null) {
@@ -153,7 +193,7 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
 
         //optimize drawing on scale, use frame texture to override preview texture;
         Bitmap frameTexture = frameTextureHolder.bitmap;
-        if(optimizeScaleMode && frameTexture != null && mLastDecodeFrameTransform != null) {
+        if(optimizeTransformMode && frameTexture != null && mLastDecodeFrameTransform != null) {
             float x = mLastDecodeFrameTransform.transformX;
             float y = mLastDecodeFrameTransform.transformY;
             float scale = mLastDecodeFrameTransform.scale;
@@ -209,32 +249,32 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         }
     }
 
-    private void dispatchDrawOnTransformEnd(SDecoder.FrameDecodeCall decodeCall) {
-        Canvas canvas = lockCanvasCompat();
+    /**
+     * Init transform.
+     * Current implementation is to make pdf center-inside
+     */
+    protected void initializeTransform() {
+        //fit transform to center inside
+        Rect rect = surfaceView.getHolder().getSurfaceFrame();
+        int surfaceWidth = rect.width();
+        int surfaceHeight = rect.height();
+        float wRatio = (float) surfaceWidth / (float) pdfWidth;
+        float hRatio = (float) surfaceHeight / (float) pdfHeight;
 
-        onDrawTransformEnd(canvas);
-
-        surfaceView.getHolder().unlockCanvasAndPost(canvas);
-        mLastDecodeFrameTransform = decodeCall;
-    }
-
-    private void dispatchDrawOnTransforming() {
-        Canvas canvas = lockCanvasCompat();
-
-        onDrawTransforming(canvas);
-
-        surfaceView.getHolder().unlockCanvasAndPost(canvas);
-    }
-
-    BitmapHolder getPreviewTextureHolder() {
-        synchronized (OPdfSurfaceRenderer.class) {
-            return previewTextureHolder;
-        }
-    }
-
-    BitmapHolder getFrameTextureHolder() {
-        synchronized (OPdfSurfaceRenderer.class) {
-            return frameTextureHolder;
+        if(wRatio >= 1.0f && hRatio >= 1.0f) {
+            transform.setTranslate(-(surfaceWidth - pdfWidth), -(surfaceHeight - pdfHeight));
+        } else {
+            if(wRatio > hRatio) {
+                //fit height
+                float scale = hRatio;
+                transform.setScale(scale, scale);
+                transform.postTranslate((surfaceWidth -  pdfWidth * scale) / 2.0f, 0);
+            } else {
+                //fit width
+                float scale = wRatio;
+                transform.setScale(scale, scale);
+                transform.postTranslate(0, (surfaceHeight -  pdfHeight * scale) / 2.0f);
+            }
         }
     }
 
@@ -252,6 +292,7 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         if(isDestroyed) {
             return;
         }
+        initializeTransform();
         dispatchDrawOnTransforming();
         if(outerListener != null) {
             outerListener.onPdfPreviewReady();
@@ -264,6 +305,35 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
             return;
         }
         dispatchDrawOnTransformEnd(decodeCall);
+    }
+
+    private void dispatchDrawOnTransformEnd(SDecoder.FrameDecodeCall decodeCall) {
+        Canvas canvas = lockCanvasCompat();
+
+        onDrawTransformEnd(canvas);
+
+        surfaceView.getHolder().unlockCanvasAndPost(canvas);
+        mLastDecodeFrameTransform = decodeCall;
+    }
+
+    private void dispatchDrawOnTransforming() {
+        Canvas canvas = lockCanvasCompat();
+
+        onDrawTransforming(canvas);
+
+        surfaceView.getHolder().unlockCanvasAndPost(canvas);
+    }
+
+    protected final BitmapHolder getPreviewTextureHolder() {
+        synchronized (OPdfSurfaceRenderer.class) {
+            return previewTextureHolder;
+        }
+    }
+
+    protected final BitmapHolder getFrameTextureHolder() {
+        synchronized (OPdfSurfaceRenderer.class) {
+            return frameTextureHolder;
+        }
     }
 
     @Override
@@ -279,7 +349,6 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
             int y = (int) ((event.getY() - trany) / s);
 
             outerListener.onPdfClick(x, y, pdfWidth, pdfHeight);
-
         }
     }
 
