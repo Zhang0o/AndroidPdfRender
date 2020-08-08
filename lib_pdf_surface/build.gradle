@@ -29,16 +29,16 @@ apply plugin: 'com.github.dcendents.android-maven'
 apply plugin: 'com.jfrog.bintray'
 
 //项目主页
-def siteUrl = 'https://github.com/Zhang0o/OPdf'
+def siteUrl = 'https://github.com/Zhang0o/AndroidPdfRender'
 //项目的版本控制地址
-def gitUrl = 'https://github.com/Zhang0o/OPdf.git'
+def gitUrl = 'https://github.com/Zhang0o/AndroidPdfRender.git'
 
 //发布到组织名称名字，必须填写
 group = "com.ober.opdf"
 //发布到JCenter上的项目名字，必须填写
 def libName = "surface-renderer"
 // 版本号，下次更新是只需要更改版本号即可
-version = "0.0.3"
+version = "0.0.4"
 
 //生成源文件
 task sourcesJar(type: Jar) {
@@ -53,7 +53,7 @@ task javadoc(type: Javadoc) {
     options.charSet 'UTF-8'
     options.author true
     options.version true
-    options.links "https://github.com/Zhang0o/OPdf"
+    options.links "https://github.com/Zhang0o/AndroidPdfRender"
     failOnError false
 }
 
