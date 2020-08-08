@@ -23,8 +23,6 @@ android {
 
 dependencies {
     implementation fileTree(dir: "libs", include: ["*.jar"])
-    implementation 'androidx.appcompat:appcompat:1.1.0'
-
 }
 
 apply plugin: 'com.github.dcendents.android-maven'
@@ -40,8 +38,7 @@ group = "com.ober.opdf"
 //发布到JCenter上的项目名字，必须填写
 def libName = "surface-renderer"
 // 版本号，下次更新是只需要更改版本号即可
-version = "0.0.2"
-/**  上面配置后上传至JCenter后的编译路径是这样的： compile 'group:libName:version'  **/
+version = "0.0.3"
 
 //生成源文件
 task sourcesJar(type: Jar) {
@@ -56,7 +53,7 @@ task javadoc(type: Javadoc) {
     options.charSet 'UTF-8'
     options.author true
     options.version true
-    options.links "https://github.com/JayZhaoCN"
+    options.links "https://github.com/Zhang0o/OPdf"
     failOnError false
 }
 
@@ -119,7 +116,7 @@ bintray {
     pkg {
         repo = "opdf"
         name = libName    //发布到JCenter上的项目名字，必须填写
-        desc = 'Android SurfaceView Pdf Viewer'    //项目描述
+        desc = 'Android SurfaceView Pdf Renderer'    //项目描述
         websiteUrl = siteUrl
         vcsUrl = gitUrl
         licenses = ["Apache-2.0"]

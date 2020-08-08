@@ -27,7 +27,9 @@ public class OPdfRenderConfig {
     }
 
     /**
-     * Get custom FullTextureBmpGenerator or default one , always none null.
+     * Get custom FullTextureBmpGenerator or default one , always not null.
+     *
+     * @return custom FullTextureBmpGenerator or default
      */
     public static FullTextureBmpGenerator getFullTextureBmpGenerator() {
         if(fullTextureBmpGenerator == null) {

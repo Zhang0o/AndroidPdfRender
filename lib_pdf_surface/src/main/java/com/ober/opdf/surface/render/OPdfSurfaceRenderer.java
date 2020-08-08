@@ -16,8 +16,6 @@ import android.view.ScaleGestureDetector;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 
-import androidx.annotation.MainThread;
-
 import com.ober.opdf.surface.OPdfCallback;
 import com.ober.opdf.surface.OPdfRenderConfig;
 import com.ober.opdf.surface.base.BitmapHolder;
@@ -278,7 +276,6 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         }
     }
 
-    @MainThread
     protected void onPdfInitCallback(int pageWidth, int pageHeight) {
         pdfWidth = pageWidth;
         pdfHeight = pageHeight;
@@ -287,7 +284,6 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         }
     }
 
-    @MainThread
     protected void onFullPageDecodeCallback() {
         if(isDestroyed) {
             return;
@@ -299,7 +295,6 @@ public class OPdfSurfaceRenderer implements ViewGestureHelper.GestureHandler {
         }
     }
 
-    @MainThread
     protected void onFrameDecodeCallback(SDecoder.FrameDecodeCall decodeCall) {
         if(isDestroyed) {
             return;
