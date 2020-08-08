@@ -39,10 +39,6 @@
         //optionally set callback
         mRenderer.setOPdfCallback(new OPdfCallbackImpl());
         
-It is an single PDF page viewer implementation base on SurfaceView.
-Free scale and translate is supported.
-Easy to use and show complicated PDF very well.
-
 
 ChangeLog
 -----------
