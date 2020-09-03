@@ -11,12 +11,12 @@
 
          /app 是surface-renderer演示Demo(依赖lib_pdf_surface)
          /lib_pdf_surface 是"surface-renderer"的实现
-### include to project
+### Get Started
 
-"surface-renderer" 0.0.4 已经发布到jcenter 
+"surface-renderer" 0.1.0 已经发布到jcenter 
 
         //use in gradle:
-        implementation 'com.ober.opdf:lib_pdf_surface:0.0.4'
+        implementation 'com.ober.opdf:lib_pdf_surface:0.1.0'
 
 ### 使用简介
 
@@ -38,7 +38,9 @@
         //可选，添加回调
         //optionally set callback
         mRenderer.setOPdfCallback(new OPdfCallbackImpl());
-        
+
+### 关联项目
+https://github.com/Zhang0o/AndroidPdfiumCompat
 
 ChangeLog
 -----------
@@ -55,7 +57,10 @@ ChangeLog
 * Remove androidx.appcompat dependency 
 
 ### v0.0.4
-* bug fix
+* Bugfix
+
+### v0.1.0
+* Integrate pdfium library to support api version lower than 21.
 
 Todo
 -----
