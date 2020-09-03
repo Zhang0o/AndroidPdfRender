@@ -1,6 +1,5 @@
 package com.ober.opdf.surface.render;
 
-import android.annotation.TargetApi;
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
 import android.graphics.pdf.PdfRenderer;
@@ -8,6 +7,7 @@ import android.os.Handler;
 import android.os.Message;
 import android.os.ParcelFileDescriptor;
 
+import com.ober.opdf.pdfium.PdfRendererCompat;
 import com.ober.opdf.surface.OPdfRenderConfig;
 import com.ober.opdf.surface.base.BitmapHolder;
 import com.ober.opdf.surface.render.events.SPdfExitEv;
@@ -24,7 +24,6 @@ import java.util.concurrent.LinkedBlockingQueue;
 /**
  * Created by ober on 2020/7/31.
  */
-@TargetApi(21)
 public class SDecoder {
 
     public static class FrameDecodeCall {
@@ -124,10 +123,11 @@ public class SDecoder {
                 sendExitMsg();
                 return;
             }
-            PdfRenderer pdfRenderer;
+
+            PdfRendererCompat pdfRenderer;
 
             try {
-                pdfRenderer = new PdfRenderer(pFd);
+                pdfRenderer = new PdfRendererCompat(pFd);
             } catch (IOException e) {
                 e.printStackTrace();
                 errorMsg = "create PdfRenderer error";
@@ -137,7 +137,7 @@ public class SDecoder {
                 return;
             }
 
-            PdfRenderer.Page page = pdfRenderer.openPage(pageIdx);
+            PdfRendererCompat.Page page = pdfRenderer.openPage(pageIdx);
 
             final int pageWidth = page.getWidth();
             final int pageHeight = page.getHeight();
@@ -230,7 +230,7 @@ public class SDecoder {
             sendExitMsg();
         }
 
-        private void closeEveryThing(ParcelFileDescriptor fd, PdfRenderer.Page page, PdfRenderer renderer) {
+        private void closeEveryThing(ParcelFileDescriptor fd, PdfRendererCompat.Page page, PdfRendererCompat renderer) {
             if(fd != null) {
                 try {
                     fd.close();
