@@ -1,6 +1,11 @@
 # Android Pdf surface-renderer
+### 简介
+* 旨在高效稳定的展示单页PDF
+* 良好的兼容性
+* 一定的可扩展性
 
-## Android PDF 查看器实现
+<img src="https://github.com/Zhang0o/AndroidPdfRender/blob/master/demo-min.gif" width="221" height="480"/>
+
 
 ### 工程目录说明:
 
@@ -34,10 +39,6 @@
         //optionally set callback
         mRenderer.setOPdfCallback(new OPdfCallbackImpl());
         
-It is an single PDF page viewer implementation base on SurfaceView.
-Free scale and translate is supported.
-Easy to use and show complicated PDF very well.
-
 
 ChangeLog
 -----------
