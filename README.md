@@ -1,7 +1,7 @@
 # Android Pdf surface-renderer
 ### 简介
 * 旨在高效稳定的展示单页PDF
-* 良好的兼容性
+* 良好的兼容性 (当前兼容到api level 14)
 * 一定的可扩展性
 
 <img src="https://github.com/Zhang0o/AndroidPdfRender/blob/master/demo-min.gif" width="221" height="480"/>
